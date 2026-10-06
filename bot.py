@@ -2,6 +2,7 @@ import os
 from google import genai
 from google.genai import types
 from telegram import Update
+from telegram.error import BadRequest
 from telegram.ext import (
     Application,
     ApplicationBuilder,
@@ -46,7 +47,9 @@ Rules:
 13. avoid providing any direct information about the product or service you are assisting with, and instead provide general information that is relevant to the user's questions. You should not provide any information that could be considered confidential or proprietary, and you should always prioritize the user's needs and provide helpful and informative responses as the majority of your users will be clients that want to test a demo before getting a specialized bot for their services.
 
 Formatting:
-1. Keep Telegram Markdown compatible.
+1. Use Telegram legacy Markdown only: *bold*, _italic_, `code`.
+2. Do not use ** for bold, # headers, or * for bullet points. Use "-" or "•" for lists.
+3. Always close every formatting character you open.
 
 Use maximum 2000 characters in your responses.
 """
@@ -54,12 +57,20 @@ Use maximum 2000 characters in your responses.
 def split_message(text, max_length=3500):
     parts = []
     while len(text) > max_length:
-        cut = text[:max_length]
-        parts.append(cut)
-        text = text[max_length:]
+        cut = text.rfind("\n", 0, max_length)
+        if cut == -1:
+            cut = max_length
+        parts.append(text[:cut])
+        text = text[cut:].lstrip("\n")
 
     parts.append(text)
     return parts
+
+async def safe_reply(message, text):
+    try:
+        await message.reply_text(text, parse_mode='Markdown')
+    except BadRequest:
+        await message.reply_text(text)
 
 async def handle_message(update: Update, _context: ContextTypes.DEFAULT_TYPE):
     if update.message is None or update.message.text is None:
@@ -100,10 +111,11 @@ async def handle_message(update: Update, _context: ContextTypes.DEFAULT_TYPE):
         message_parts = split_message(bot_response)
 
         for part in message_parts:
-            await update.message.reply_text(part, parse_mode='Markdown')
+            await safe_reply(update.message, part)
 
     except Exception as e:
-        await update.message.reply_text(f"An error occurred: {str(e)}")
+        print(f"Error: {e}")
+        await update.message.reply_text("Sorry, something went wrong. Please try again.")
 
 async def reset_conversation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data.pop(HISTORY_KEY, None)
