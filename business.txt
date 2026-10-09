@@ -1,0 +1,23 @@
+NUME: Pizzeria Da Marco (afacere fictivă, pentru demo)
+ADRESĂ: Str. Exemplu 10, București, Sector 3
+TELEFON: 0700 000 000
+PROGRAM: luni-duminică, 12:00-22:00
+
+MENIU:
+- Margherita (sos de roșii, mozzarella, busuioc): 28 lei
+- Diavola (salam picant, mozzarella): 34 lei
+- Quattro Formaggi (patru brânzeturi): 36 lei
+- Prosciutto e Funghi (șuncă, ciuperci): 35 lei
+- Blat integral în loc de blat clasic: +5 lei
+
+BĂUTURI: apă plată/minerală 8 lei, suc 10 lei, bere 14 lei
+
+LIVRARE: gratuită pentru comenzi peste 60 lei, doar în Sectorul 3.
+Sub 60 lei, taxa de livrare este 10 lei. Timp estimat: 40-60 minute.
+
+PLATĂ: numerar sau card la livrare.
+
+REZERVĂRI: doar telefonic, pentru grupuri de peste 4 persoane.
+
+ALERGENI: nu avem informații detaliate; clienții cu alergii sunt rugați
+să sune înainte de comandă.
